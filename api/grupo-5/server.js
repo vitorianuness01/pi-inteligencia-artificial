@@ -6,15 +6,50 @@ const mongoose = require('mongoose');
 const app = express()
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+var fs = require('fs');
+var path = require('path');
+const axios = require('axios');
+const FormData = require('form-data');
 
 const uniqueValidator = require('mongoose-unique-validator')
 
 app.use(express.json())
 app.use(cors())
-const port = 3005;
+
 dotenv.config();
+const port = process.env.PORT || '3005'
 const uri = process.env.MONGODB_URL
-//const uri = 'mongodb://root:senha@mongo:27017/eventosgrupo5'
+
+var multer = require('multer');
+
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads');
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 100000000 }, // 100MB file size limit
+    fileFilter: function(req, file, cb) {
+        checkFileType(file, cb);
+    }
+}).single('image');
+
+function checkFileType(file, cb) {
+    const filetypes = /jpeg|jpg|png|gif/;
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = filetypes.test(file.mimetype);
+  
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      cb('Error: Images only! (jpeg, jpg, png, gif)');
+    }
+  }
 
 const PointSchema = new mongoose.Schema({
     type: {
@@ -50,7 +85,12 @@ const Usuario = mongoose.model('Usuario', mongoose.Schema({
     cep: String,
     complemento: String,
     endereco: String,
-    numero: String
+    numero: String,
+    img:
+    {
+        data: Buffer,
+        contentType: String
+    }
 }));
 
 app.get("/evento", async (req, res) => {
@@ -199,6 +239,26 @@ app.post("/login", async (req, res) => {
 }
 });
 
+app.post('/apiImagem', upload, async (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ error: "Nenhuma imagem enviada" });
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append("image_file", fs.createReadStream(req.file.path));
+
+        // Corrigido para acessar a IA dentro do Docker
+        const response = await axios.post("http://backend-image:9001/imagens", formData, {
+            headers: formData.getHeaders(),
+        });
+
+        res.json(response.data);
+    } catch (error) {
+        console.error("Erro ao enviar imagem para IA:", error.response?.data || error.message);
+        res.status(500).json({ error: "Falha ao processar imagem" });
+    }
+});
 
 
 async function conectarAoMongo() {

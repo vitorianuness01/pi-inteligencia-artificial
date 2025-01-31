@@ -68,7 +68,7 @@ body {
             <h3 class="text-center mb-4">Cadastro</h3>
             <div class="alert alert-success d-none alert-usuario" role="alert"></div>
             <div class="alert alert-danger d-none alert-usuario" role="alert"></div>
-            <form id="userForm">
+            <form id="userForm" action="/usuario" method="POST" enctype="multipart/form-data">
               <!-- Nome -->
               <div class="mb-3">
                 <label for="nome" class="form-label">Nome</label>
@@ -126,6 +126,15 @@ body {
                   <input type="text" class="form-control" id="numero" placeholder="N°">
                 </div>
               </div>
+
+                      <!-- Img -->
+        <div class="row">
+          <div class="col-md-4 mb-3">
+          <label for="imagemPerfil" class="form-label visually-hidden">Perfil</label>
+             <input type="file" class="form-control" id="image" name="image" accept="image/*">
+            </div>
+       </div>
+
               <!-- Termos e Botão de Cadastro -->
               <div class="mb-3">
                 <div class="form-check">
@@ -135,6 +144,9 @@ body {
                   </label>
                 </div>
               </div>
+
+              <button type="button" class="btn btn-primary w-100 mb-3" onclick="validar()">Analisar Img</button>
+
               <!-- Botão e Link -->
               <div class="d-flex justify-content-between align-items-center">
                 <button type="submit" class="btn btn-teal">Cadastrar</button>

@@ -3,7 +3,7 @@ async function postUser(user) {
 
     // URL do endpoint para cadastro do organizador
     const usuarioEndpoint = '/usuario';
-    const URLCompleta = `http://localhost:3000${usuarioEndpoint}`;
+    const URLCompleta = `http://localhost:3005${usuarioEndpoint}`;
 
     // Captura os valores dos campos do formulário
     let nomeInput = document.querySelector('#nome');
@@ -111,3 +111,27 @@ function exibirAlerta(seletor, innerHTML, classesToAdd, classesToRemove, timeout
         console.error("Elemento de alerta não encontrado. Verifique o seletor:", seletor);
     }
 }
+
+const validar = async () => {
+    const imagemInput = document.querySelector("#image");
+
+    if (!imagemInput.files.length) {
+        alert("escolha uma imagem");
+        return;
+    }
+
+    let formData = new FormData();
+    formData.append("image", imagemInput.files[0]);
+
+    try {
+        const response = await axios.post("http://localhost:3005/apiImagem", formData, {
+            headers: { "Content-Type": "multipart/form-data" }
+        });
+
+        console.log("Resultado da IA:", response.data);
+        alert("Olhe o log para a analise da imagem!");
+    } catch (error) {
+        console.error("Erro na imagem", error);
+        alert("Erro na imagem");
+    }
+};
