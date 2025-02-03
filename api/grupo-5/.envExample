@@ -1,0 +1,3 @@
+MONGODB_URL=mongodb://localhost:27017/
+JWT_SECRET=chave aleatoria
+KEY_GEMINI=Gere sua chave aqui https://aistudio.google.com/apikey

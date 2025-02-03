@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const URLCompleta = `http://localhost:3000/evento/${eventoId}`;
+        const URLCompleta = `http://localhost:3005/evento/${eventoId}`;
         const evento = (await axios.get(URLCompleta)).data;
 
         document.querySelector(".event-image").src = evento.url_logo;

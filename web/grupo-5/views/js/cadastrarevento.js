@@ -2,7 +2,7 @@ async function postEvent(event) {
     event.preventDefault();  // Evita que o formulário seja enviado de forma tradicional
 
     const eventosEndpoint = '/eventos';  // Endpoint onde os eventos são cadastrados
-    const URLCompleta = `http://localhost:3000${eventosEndpoint}`;
+    const URLCompleta = `http://localhost:3005${eventosEndpoint}`;
 
     let nomeEventoInput = document.querySelector('#nome');
     let telefoneInput = document.querySelector('#telefone');

@@ -1,6 +1,6 @@
 async function obterEventos() {
     const eventosEndpoint = '/evento'; // Endpoint no backend
-    const URLCompleta = `http://localhost:3000${eventosEndpoint}`; // URL completa para a requisição
+    const URLCompleta = `http://localhost:3005${eventosEndpoint}`; // URL completa para a requisição
 
     try {
         // Requisição ao backend
@@ -62,7 +62,7 @@ async function obterEventos() {
 
 async function exibirEventoPorId(eventoId) {
     const eventoEndpoint = `/evento/${eventoId}`; 
-    const URLCompleta = `http://localhost:3000${eventoEndpoint}`;
+    const URLCompleta = `http://localhost:3005${eventoEndpoint}`;
 
     try {
         const evento = (await axios.get(URLCompleta)).data;

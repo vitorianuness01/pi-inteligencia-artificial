@@ -260,6 +260,35 @@ app.post('/apiImagem', upload, async (req, res) => {
     }
 });
 
+app.post('/perguntaIA', async (req, res) => {
+    try {
+        const { pergunta } = req.body;
+
+        if (!pergunta) {
+            return res.status(400).json({ error: 'A pergunta é obrigatória para gerar a resposta' });
+        }
+
+        const prompt = `${pergunta}. Mantenha a resposta em um formato corrido, sem listas, marcadores, negritos ou qualquer formatação especial. Use um tom profissional e analítico para enriquecer a explicação.`;
+
+        const response = await axios.post(
+            'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+            {
+                contents: [{ parts: [{ text: prompt }] }]
+            },
+            {
+                params: { key: process.env.KEY_GEMINI }
+            }
+        );
+
+        let resposta = response.data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Erro ao obter resposta.';
+        resposta = resposta.replace(/\n+/g, ' ');
+
+        res.json({ resposta });
+    } catch (error) {
+        console.error('Erro na API do Gemini:', error.message);
+        res.status(500).json({ error: 'Erro ao processar a pergunta.' });
+    }
+});
 
 async function conectarAoMongo() {
     await mongoose.connect(uri, {});

@@ -3,7 +3,7 @@ async function loginUser(event) {
 
     // URL do endpoint para login
     const loginEndpoint = '/login';
-    const URLCompleta = `http://localhost:3000${loginEndpoint}`;
+    const URLCompleta = `http://localhost:3005${loginEndpoint}`;
 
     // Captura os valores dos campos de email e senha
     let emailInput = document.querySelector('#email');
